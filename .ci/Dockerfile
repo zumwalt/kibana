@@ -28,11 +28,20 @@ RUN LATEST_VAULT_RELEASE=$(curl -s https://api.github.com/repos/hashicorp/vault/
   && mv vault /usr/local/bin/vault
 
 RUN groupadd -r kibana && useradd -r -g kibana kibana && mkdir /home/kibana && chown kibana:kibana /home/kibana
+RUN mkdir -p /var/lib/kibana/workspace/kibana
+WORKDIR /var/lib/kibana/workspace/kibana
+COPY package.json yarn.lock preinstall_check.js ./
+RUN npm install -g --force yarn@^"$(node -e "console.log(String(require('./package.json').engines.yarn || '').replace(/^[^\d]+/,''))")"
+RUN yarn config set yarn-offline-mirror "/var/lib/kibana/yarn-offline-cache"
+RUN --mount=type=cache,target=/var/lib/kibana/yarn-offline-cache yarn install
 
-COPY ./bash_standard_lib.sh /usr/local/bin/bash_standard_lib.sh
-RUN chmod +x /usr/local/bin/bash_standard_lib.sh
+COPY . .
 
-COPY ./runbld /usr/local/bin/runbld
-RUN chmod +x /usr/local/bin/runbld
+RUN yarn kbn bootstrap
+RUN yarn kbn run build -i @kbn/pm
+RUN node scripts/build_plugin_list_docs
+
+RUN chown -R kibana:kibana /var/lib/kibana/
 
 USER kibana
+ENTRYPOINT ["/var/lib/kibana/workspace/kibana/.ci/buildkite/entrypoint.sh"]

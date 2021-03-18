@@ -1,0 +1,13 @@
+steps:
+  - command: |
+      export DOCKER_BUILDKIT=1 && \
+      docker build -t gcr.io/elastic-kibana-184716/buildkite/ci/base:$BUILDKITE_COMMIT -f .ci/Dockerfile . --progress plain && \
+      docker push gcr.io/elastic-kibana-184716/buildkite/ci/base:$BUILDKITE_COMMIT
+    label: ":elastic:"
+    agents:
+      queue: bootstrap
+
+  - wait
+
+  - command: .buildkite/scripts/jest_pipeline.sh | buildkite-agent pipeline upload
+    label: ":pipeline: Upload"

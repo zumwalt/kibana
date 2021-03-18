@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: buildkite-agent
+spec:
+  selector:
+    matchLabels:
+      app: buildkite-agent
+  replicas: 5
+  template:
+    metadata:
+      labels:
+        app: buildkite-agent
+    spec:
+      containers:
+      - name: buildkite-agent
+        image: buildkite/agent
+        resources:
+          requests:
+            cpu: "1"
+            memory: "4Gi"
+          limits:
+            cpu: "1"
+            memory: "4Gi"
+        imagePullPolicy: Always
+        securityContext:
+          privileged: true
+        env:
+        - name: BUILDKITE_AGENT_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: buildkite-agent
+              key: token
+        - name: BUILDKITE_AGENT_TAGS
+          value: "docker=true"
+        - name: DOCKER_BUILDKIT
+          value: "1"
+        - name: COMPOSE_DOCKER_CLI_BUILD
+          value: "1"
+        - name: BUILDKIT_PROGRESS
+          value: "plain"
+        - name: BUILDKITE_GIT_CLONE_FLAGS
+          value: --single-branch --branch=$BUILDKITE_BRANCH --depth=1
+        - name: BUILDKITE_PLUGIN_DOCKER_COMPOSE_PULL_RETRIES
+          value: 5
+        - name: BUILDKITE_PLUGIN_DOCKER_COMPOSE_PUSH_RETRIES
+          value: 5
+        volumeMounts:
+        - name: docker-socket
+          mountPath: /var/run/docker.sock
+      volumes:
+      - name: docker-socket
+        hostPath: {path: /var/run/docker.sock}

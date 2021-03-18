@@ -9,7 +9,7 @@
 import { accessSync, constants } from 'fs';
 import { getConfigPath, getDataPath, getConfigDirectory } from './';
 
-describe('Default path finder', () => {
+describe.skip('Default path finder', () => {
   it('should find a kibana.yml', () => {
     const configPath = getConfigPath();
     expect(() => accessSync(configPath, constants.R_OK)).not.toThrow();

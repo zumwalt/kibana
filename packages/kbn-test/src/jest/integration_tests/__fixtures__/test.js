@@ -6,7 +6,7 @@
  * Side Public License, v 1.
  */
 
-describe('JUnit Reporter', () => {
+describe.skip('JUnit Reporter', () => {
   it('fails', () => {
     throw new Error('failure');
   });
