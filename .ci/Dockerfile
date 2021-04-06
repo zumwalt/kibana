@@ -37,5 +37,7 @@ COPY . .
 ENV BUILD_TS_REFS_DISABLE=true
 RUN yarn kbn bootstrap --no-cache
 
+RUN chown -R kibana:kibana /var/lib/kibana/
+
 USER kibana
 ENTRYPOINT ["/var/lib/kibana/workspace/kibana/.ci/buildkite/entrypoint.sh"]
