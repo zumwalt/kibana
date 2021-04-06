@@ -1,6 +1,3 @@
-# NOTE: This Dockerfile is ONLY used to run certain tasks in CI. It is not used to run Kibana or as a distributable.
-# If you're looking for the Kibana Docker image distributable, please see: src/dev/build/tasks/os_packages/docker_generator/templates/dockerfile.template.ts
-
 ARG NODE_VERSION=14.16.0
 
 FROM node:${NODE_VERSION} AS base
@@ -37,11 +34,8 @@ RUN --mount=type=cache,target=/var/lib/kibana/yarn-offline-cache yarn install
 
 COPY . .
 
-RUN yarn kbn bootstrap
-RUN yarn kbn run build -i @kbn/pm
-RUN node scripts/build_plugin_list_docs
-
-RUN chown -R kibana:kibana /var/lib/kibana/
+ENV BUILD_TS_REFS_DISABLE=true
+RUN yarn kbn bootstrap --no-cache
 
 USER kibana
 ENTRYPOINT ["/var/lib/kibana/workspace/kibana/.ci/buildkite/entrypoint.sh"]
