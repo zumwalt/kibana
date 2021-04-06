@@ -18,6 +18,6 @@ if [[ "${BUILD_TS_REFS_CACHE_CAPTURE:-}" == "true" ]]; then
   cd "$KIBANA_DIR"
 fi
 
-if [[ "$DISABLE_BOOTSTRAP_VALIDATION" != "true" ]]; then
+if [[ "${DISABLE_BOOTSTRAP_VALIDATION:-}" != "true" ]]; then
   verify_no_git_changes 'yarn kbn bootstrap'
 fi
