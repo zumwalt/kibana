@@ -1,14 +1,14 @@
 steps:
 
-  - command: |
-      export DOCKER_BUILDKIT=1 && \
-      docker build -t gcr.io/elastic-kibana-184716/buildkite/ci/base:$BUILDKITE_COMMIT -f .ci/Dockerfile . --progress plain && \
-      docker push gcr.io/elastic-kibana-184716/buildkite/ci/base:$BUILDKITE_COMMIT
-    label: "Bootstrap"
-    agents:
-      queue: bootstrap
+  # - command: |
+  #     export DOCKER_BUILDKIT=1 && \
+  #     docker build -t gcr.io/elastic-kibana-184716/buildkite/ci/base:$BUILDKITE_COMMIT -f .ci/Dockerfile . --progress plain && \
+  #     docker push gcr.io/elastic-kibana-184716/buildkite/ci/base:$BUILDKITE_COMMIT
+  #   label: "Bootstrap"
+  #   agents:
+  #     queue: bootstrap
 
-  - wait
+  # - wait
 
   # - command: |
   #     export DOCKER_BUILDKIT=1 && \
