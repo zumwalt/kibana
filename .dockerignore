@@ -75,9 +75,8 @@
 **/.yarn-local-mirror
 
 # Bazel
-/bazel-*
 /.bazelrc.user
 
-/.git
+# /.git
 /.ci/Dockerfile
 .buildkite/pipeline.yml
