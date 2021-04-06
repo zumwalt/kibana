@@ -114,10 +114,11 @@ export const BootstrapCommand: ICommand = {
      * have to, as it will slow down the bootstrapping process.
      */
 
+    const caches = new Map<Project, { file: BootstrapCacheFile; valid: boolean }>();
+    let cachedProjectCount = 0;
+
     if (options.cache) {
       const checksums = await getAllChecksums(kbn, log, yarnLock);
-      const caches = new Map<Project, { file: BootstrapCacheFile; valid: boolean }>();
-      let cachedProjectCount = 0;
 
       for (const project of nonBazelProjectsOnly.values()) {
         if (project.hasScript('kbn:bootstrap') && !project.isBazelPackage()) {
