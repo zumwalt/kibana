@@ -21,7 +21,6 @@ steps:
 
   - command: .buildkite/scripts/jest_pipeline.sh | buildkite-agent pipeline upload
     label: ":jest: Upload"
-    group: ":jest:"
     agents:
       queue: default
 
