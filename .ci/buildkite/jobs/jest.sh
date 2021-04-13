@@ -7,4 +7,4 @@ export BUILD_TS_REFS_DISABLE=true
 .ci/buildkite/bootstrap.sh
 
 echo "--- Jest"
-node --expose-gc ./node_modules/.bin/jest --logHeapUsage --runInBand --config $1
+node --preserve-symlinks --preserve-symlinks-main --expose-gc ./node_modules/.bin/jest --logHeapUsage --runInBand --config $1
