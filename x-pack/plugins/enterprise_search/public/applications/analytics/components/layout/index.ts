@@ -5,10 +5,5 @@
  * 2.0.
  */
 
-export {
-  SetEnterpriseSearchChrome,
-  SetAnalyticsChrome,
-  SetElasticsearchChrome,
-  SetAppSearchChrome,
-  SetWorkplaceSearchChrome,
-} from './set_chrome';
+export { useEnterpriseSearchAnalyticsNav } from './nav';
+export { EnterpriseSearchAnalyticsPageTemplate } from './page_template';

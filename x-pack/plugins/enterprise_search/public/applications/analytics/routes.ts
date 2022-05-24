@@ -5,10 +5,4 @@
  * 2.0.
  */
 
-export {
-  SetEnterpriseSearchChrome,
-  SetAnalyticsChrome,
-  SetElasticsearchChrome,
-  SetAppSearchChrome,
-  SetWorkplaceSearchChrome,
-} from './set_chrome';
+export const ROOT_PATH = '/';
