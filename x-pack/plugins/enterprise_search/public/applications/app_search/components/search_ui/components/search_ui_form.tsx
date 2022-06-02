@@ -9,7 +9,20 @@ import React from 'react';
 
 import { useValues, useActions } from 'kea';
 
-import { EuiForm, EuiFormRow, EuiSelect, EuiComboBox, EuiButton } from '@elastic/eui';
+import netlifyIcon from '../../../../../assets/netlify-icon.svg';
+
+import {
+  EuiForm,
+  EuiFormRow,
+  EuiSelect,
+  EuiComboBox,
+  EuiButton,
+  EuiFlexGroup,
+  EuiFlexItem,
+  EuiSpacer
+} from '@elastic/eui';
+
+import { externalUrl } from '../../../../shared/enterprise_search_url/external_url';
 
 import { EngineLogic } from '../../engine';
 import {
@@ -30,7 +43,11 @@ import { ActiveField } from '../types';
 import { generatePreviewUrl } from '../utils';
 
 export const SearchUIForm: React.FC = () => {
-  const { searchKey } = useValues(EngineLogic);
+  const { engineName, searchKey } = useValues(EngineLogic);
+  console.log(engineName)
+  console.log(searchKey)
+  console.log(externalUrl.enterpriseSearchUrl);
+
   const {
     dataLoading,
     validFields,
@@ -77,6 +94,21 @@ export const SearchUIForm: React.FC = () => {
   const selectedThumbnailOption = formatSelectOption(thumbnailField);
   const selectedSortOptions = formatMultiOptions(sortFields);
   const selectedFacetOptions = formatMultiOptions(facetFields);
+
+  const netlifyUrl = () => {
+    const baseUrl = 'https://app.netlify.com/start/deploy?repository=https://github.com/zumwalt/app-search-reference-ui-react';
+    const params = [
+      `#REACT_APP_ENDPOINT_BASE=${externalUrl.enterpriseSearchUrl}`,
+      `&REACT_APP_ENGINE_NAME=${engineName}`,
+      `&REACT_APP_SEARCH_KEY=${searchKey}`,
+      `&REACT_APP_THUMBNAIL_URL=` + selectedThumbnailOption.value,
+      `&REACT_APP_URL_FIELD=` + selectedURLOption.value,
+      `&REACT_APP_SORT_FIELDS=` + selectedSortOptions,
+      `&REACT_APP_FACETS=` + selectedFacetOptions
+    ];
+    return baseUrl + params.join('');
+  }
+  console.log(netlifyUrl());
 
   return (
     <EuiForm component="form" action={previewHref} target="_blank" method="POST">
@@ -144,16 +176,31 @@ export const SearchUIForm: React.FC = () => {
           data-test-subj="selectThumbnail"
         />
       </EuiFormRow>
-      <EuiButton
-        disabled={dataLoading}
-        type="submit"
-        fill
-        iconType="popout"
-        iconSide="right"
-        data-test-subj="generateSearchUiPreview"
-      >
-        {GENERATE_PREVIEW_BUTTON_LABEL}
-      </EuiButton>
+      <EuiSpacer />
+      <EuiFlexGroup gutterSize='s'>
+        <EuiFlexItem grow={false}>
+          <EuiButton
+            disabled={dataLoading}
+            type="submit"
+            fill
+            iconType="popout"
+            iconSide="right"
+            data-test-subj="generateSearchUiPreview"
+          >
+            {GENERATE_PREVIEW_BUTTON_LABEL}
+          </EuiButton>
+        </EuiFlexItem>
+        <EuiFlexItem grow={false}>
+          <EuiButton
+            href={netlifyUrl()}
+            color='success'
+            iconType={netlifyIcon}
+            data-test-subj="generateSearchUiNetlify"
+          >
+            Deploy to Netlify
+          </EuiButton>
+        </EuiFlexItem>
+      </EuiFlexGroup>
     </EuiForm>
   );
 };
