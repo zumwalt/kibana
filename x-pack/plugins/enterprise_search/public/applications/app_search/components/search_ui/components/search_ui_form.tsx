@@ -44,9 +44,6 @@ import { generatePreviewUrl } from '../utils';
 
 export const SearchUIForm: React.FC = () => {
   const { engineName, searchKey } = useValues(EngineLogic);
-  console.log(engineName)
-  console.log(searchKey)
-  console.log(externalUrl.enterpriseSearchUrl);
 
   const {
     dataLoading,
@@ -103,9 +100,10 @@ export const SearchUIForm: React.FC = () => {
       `&REACT_APP_SEARCH_KEY=${searchKey}`,
       `&REACT_APP_THUMBNAIL_URL=` + selectedThumbnailOption.value,
       `&REACT_APP_URL_FIELD=` + selectedURLOption.value,
-      `&REACT_APP_SORT_FIELDS=` + selectedSortOptions,
-      `&REACT_APP_FACETS=` + selectedFacetOptions
+      `&REACT_APP_SORT_FIELDS=` + selectedSortOptions.map(option => option.value),
+      `&REACT_APP_FACETS=` + selectedFacetOptions.map(option => option.value)
     ];
+
     return baseUrl + params.join('');
   }
   console.log(netlifyUrl());
