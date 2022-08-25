@@ -6,3 +6,11 @@
  */
 
 export const ROOT_PATH = '/';
+
+export const COLLECTIONS_PATH = '/collections';
+export const COLLECTION_CREATION_PATH = `${COLLECTIONS_PATH}/new`;
+
+// Static views
+export const COLLECTION_PATH = '/collection/my-website';
+export const COLLECTION_INTEGRATE_PATH = '/collection/my-website/integrate';
+export const COLLECTION_SETTINGS_PATH = '/collection/my-website/settings';
